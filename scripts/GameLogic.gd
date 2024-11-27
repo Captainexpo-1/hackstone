@@ -30,16 +30,20 @@ enum GameState {
 @onready var timer_finished_cb = connect("on_done_pressed", Callable(self, "_on_done_pressed"))
 @export var sound_resource : Resource
 @export var notifier : Node
-
 var state : GameState = GameState.MY_TURN
 var instance = null
+
+var ai_instance : Node = null
 
 func add_card(card_scene, card_group_controller):
 	var node3d_card = card_scene.instantiate() as Node3D
 	node3d_card.transform.origin = Vector3(0, -20, 50)
 	card_group_controller.insert_card(node3d_card, 0, node3d_card.transform.origin)
 
-	
+func load_ai():
+	ai_instance = preload("res://scripts/AI/Implementations/AI_Easy.gd").new()
+	if not ai_instance.has_method("is_ai"): print("AI INSTANCE DOESN'T EXTEND AIBase")
+
 func deal_cards():
 	var time_between_cards = 0.25	
 	for i in 7:
@@ -54,6 +58,8 @@ func deal_cards():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	instance = self
+	
+	await load_ai()
 	await deal_cards()
 	await get_tree().create_timer(1).timeout
 	await on_turn_start()
@@ -101,62 +107,24 @@ func on_turn_start():
 
 func _perform_ai():
 	var cur_mana = 10
+	var saved_data = []
 	while(true):
 		if my_avatar.toughness <= 0:
 			return # Quick hack to fix bug on player's death
+			
 		await get_tree().create_timer(1.0).timeout
-		var res = get_next_action(cur_mana)
+		
+		var res: Array = ai_instance.call("get_next_action", cur_mana, opponent_hand, opponent_battlefield, my_battlefield, opponent_avatar, my_avatar, saved_data)
 		var next_action = res[1]
 		cur_mana = res[0]
+			
+		if len(res) > 2: saved_data = res[2]
+		
 		if next_action == null:
 			break
 		next_action.call()
 	await get_tree().create_timer(1.0).timeout
 	_on_done_pressed()
-
-# HACK: Returns an array of [int, Action] in order to keep track of mana for now
-func get_next_action(mana: int) -> Array:
-	if my_avatar == null || my_avatar.toughness <= 0:
-		return [mana, null]
-	
-	var ai_hand_cards: Array[Node3D] = opponent_hand.get_cards()
-	var ai_hand = opponent_hand
-	var ai_battlefield_cards: Array[Node3D] = opponent_battlefield.get_cards()
-	var ai_battlefield = opponent_battlefield
-	var player_battlefield_cards: Array[Node3D] = my_battlefield.get_cards()
-	var player_battlefield = my_battlefield
-	
-	var card = null
-	var is_hack = false
-	for i in ai_hand_cards:
-		if i.casting_cost <= mana:
-			card = i
-			is_hack = i.type == CardType.HACK
-			break
-
-
-	if card != null:
-		if not is_hack:
-			return [mana - card.casting_cost, func(): ai_battlefield.insert_card(ai_hand.take(card), 0, card.transform.origin)]
-		elif player_battlefield_cards.size() > 0: 
-			return [mana - card.casting_cost, func(): card.play(player_battlefield_cards[randi() % player_battlefield_cards.size()])]
-		else:
-			return [mana - card.casting_cost, func(): card.play(my_avatar)]
-	# Can't play any minions, must attack now
-	for c in ai_battlefield_cards:
-		if c.tapped == false:
-			var rng = RandomNumberGenerator.new()
-			var f = func(): 
-				if rng.randf_range(0.0, 1.0)>0.5 && player_battlefield_cards.size() > 0:
-					c.play(player_battlefield_cards[randi() % player_battlefield_cards.size()])
-				else:
-					c.play(my_avatar) # Attack player
-	
-			return [mana, f]
-			
-	
-	
-	return [mana, null]
 
 func reset_all_cards(card_group_controller):
 	for card in card_group_controller.get_cards():
