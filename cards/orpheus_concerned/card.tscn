@@ -1,7 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://be0nsg5tyb27f"]
+[gd_scene load_steps=12 format=3 uid="uid://be0nsg5tyb27f"]
 
 [ext_resource type="PackedScene" uid="uid://dxdy4c55rwyag" path="res://components/card_prefab.tscn" id="1_3dvit"]
 [ext_resource type="Texture2D" uid="uid://b6gctcucx1lyg" path="res://cards/orpheus_concerned/orpheus_concerned.png" id="2_0qgp0"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rpx25"]
+viewport_path = NodePath("DamageIndicatorViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5rrfx"]
 albedo_texture = ExtResource("2_0qgp0")
@@ -28,6 +31,9 @@ viewport_path = NodePath("CostViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_jyqx5"]
 viewport_path = NodePath("TitleViewport")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_lmcpj"]
+viewport_path = NodePath("TiredViewport")
+
 [node name="Card2" instance=ExtResource("1_3dvit")]
 card_name = "Concerned Orpheus"
 subtype = "Dinosaur"
@@ -36,6 +42,9 @@ toughness = 4
 flavortext = "...is it just me, or does debugging feel scarier than a meteor storm"
 description = "[color=41e18e][b]Tech debt[/b][/color]: Deals 1 damage to itself"
 casting_cost = 2
+
+[node name="DamageIndicatorSprite" parent="." index="0"]
+texture = SubResource("ViewportTexture_rpx25")
 
 [node name="counterspell_card" parent="card" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_5rrfx")
@@ -52,3 +61,6 @@ texture = SubResource("ViewportTexture_ruac5")
 
 [node name="TitleSprite" parent="card" index="5"]
 texture = SubResource("ViewportTexture_jyqx5")
+
+[node name="TiredLabelSprite" parent="card" index="6"]
+texture = SubResource("ViewportTexture_lmcpj")

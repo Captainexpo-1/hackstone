@@ -13,6 +13,7 @@ func _ready() -> void:
 	card_library.append(load("res://cards/orpheus_maximus/card.tscn"))
 	card_library.append(load("res://cards/orpheus_orphling/card.tscn"))
 	card_library.append(load("res://cards/orpheus_concerned/card.tscn"))
+	card_library.append(load("res://cards/hakkuun/card.tscn"))
 
 
 func get_random_card() -> PackedScene:

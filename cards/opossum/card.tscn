@@ -1,7 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bg1nrtw7f0nth"]
+[gd_scene load_steps=12 format=3 uid="uid://bg1nrtw7f0nth"]
 
 [ext_resource type="PackedScene" uid="uid://dxdy4c55rwyag" path="res://components/card_prefab.tscn" id="1_cceoh"]
 [ext_resource type="Texture2D" uid="uid://duya7j74gc7f" path="res://cards/opossum/card_opossum.png" id="2_u5egr"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_582a4"]
+viewport_path = NodePath("DamageIndicatorViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6uf41"]
 albedo_texture = ExtResource("2_u5egr")
@@ -28,6 +31,9 @@ viewport_path = NodePath("CostViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_e8ddd"]
 viewport_path = NodePath("TitleViewport")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_46j61"]
+viewport_path = NodePath("TiredViewport")
+
 [node name="Card2" instance=ExtResource("1_cceoh")]
 card_name = "Opossum"
 subtype = "Beast"
@@ -36,6 +42,9 @@ toughness = 2
 flavortext = "It really is an awkward looking creature"
 description = "[color=41e18e][b]Rabid[/b][/color]: Enemies damaged by Opossum become [b]Infected[/b]"
 casting_cost = 1
+
+[node name="DamageIndicatorSprite" parent="." index="0"]
+texture = SubResource("ViewportTexture_582a4")
 
 [node name="counterspell_card" parent="card" index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_6uf41")
@@ -52,3 +61,6 @@ texture = SubResource("ViewportTexture_se5js")
 
 [node name="TitleSprite" parent="card" index="5"]
 texture = SubResource("ViewportTexture_e8ddd")
+
+[node name="TiredLabelSprite" parent="card" index="6"]
+texture = SubResource("ViewportTexture_46j61")

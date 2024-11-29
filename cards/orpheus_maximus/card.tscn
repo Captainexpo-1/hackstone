@@ -1,6 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://u6lo5h4jbmwu"]
+[gd_scene load_steps=10 format=3 uid="uid://u6lo5h4jbmwu"]
 
 [ext_resource type="PackedScene" uid="uid://dxdy4c55rwyag" path="res://components/card_prefab.tscn" id="1_lvfba"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_o314i"]
+viewport_path = NodePath("DamageIndicatorViewport")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_yk4s0"]
 viewport_path = NodePath("PowerToughnessViewport")
@@ -24,6 +27,9 @@ viewport_path = NodePath("CostViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_3mau7"]
 viewport_path = NodePath("TitleViewport")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_2xc8x"]
+viewport_path = NodePath("TiredViewport")
+
 [node name="Card2" instance=ExtResource("1_lvfba")]
 card_name = "Orpheus Maximus"
 subtype = "Dinosaur"
@@ -31,6 +37,9 @@ power = 5
 flavortext = "Nothing gets in my way... NOTHING!"
 description = ""
 casting_cost = 4
+
+[node name="DamageIndicatorSprite" parent="." index="0"]
+texture = SubResource("ViewportTexture_o314i")
 
 [node name="PowerToughnessSprite" parent="card" index="2"]
 texture = SubResource("ViewportTexture_yk4s0")
@@ -44,3 +53,6 @@ texture = SubResource("ViewportTexture_3nvk2")
 
 [node name="TitleSprite" parent="card" index="5"]
 texture = SubResource("ViewportTexture_3mau7")
+
+[node name="TiredLabelSprite" parent="card" index="6"]
+texture = SubResource("ViewportTexture_2xc8x")

@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://6ndk8pqt8udh"]
+
+[ext_resource type="PackedScene" uid="uid://dxdy4c55rwyag" path="res://components/card_prefab.tscn" id="1_khu76"]
+[ext_resource type="Texture2D" uid="uid://nplyy3ut4g2b" path="res://cards/hakkuun/hakkuun.png" id="2_gfuxl"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_oallc"]
+viewport_path = NodePath("DamageIndicatorViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aubbb"]
+albedo_texture = ExtResource("2_gfuxl")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_x7f83"]
+viewport_path = NodePath("PowerToughnessViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_247tb"]
+viewport_path = NodePath("DescriptionViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4q7m"]
+resource_local_to_scene = true
+transparency = 4
+blend_mode = 4
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_247tb")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_p1n16"]
+viewport_path = NodePath("DescriptionViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0tvsc"]
+viewport_path = NodePath("CostViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4gh7w"]
+viewport_path = NodePath("TitleViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fex68"]
+viewport_path = NodePath("TiredViewport")
+
+[node name="Card" instance=ExtResource("1_khu76")]
+card_name = "Nervous Hakkuun"
+subtype = "Raccoon"
+power = 4
+toughness = 2
+flavortext = "Heidi is a very skittish creature, but never fails to be cute"
+description = "[color=41e18e][b]Announcement[/b][/color]: Play 2 1-1 Raccoon minions onto the battlefield"
+casting_cost = 5
+
+[node name="DamageIndicatorSprite" parent="." index="0"]
+texture = SubResource("ViewportTexture_oallc")
+
+[node name="counterspell_card" parent="card" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_aubbb")
+
+[node name="PowerToughnessSprite" parent="card" index="2"]
+texture = SubResource("ViewportTexture_x7f83")
+
+[node name="DescriptionSprite" parent="card" index="3"]
+material_override = SubResource("StandardMaterial3D_g4q7m")
+texture = SubResource("ViewportTexture_p1n16")
+
+[node name="CastingCostSprite" parent="card" index="4"]
+texture = SubResource("ViewportTexture_0tvsc")
+
+[node name="TitleSprite" parent="card" index="5"]
+texture = SubResource("ViewportTexture_4gh7w")
+
+[node name="TiredLabelSprite" parent="card" index="6"]
+texture = SubResource("ViewportTexture_fex68")
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.00283813, -0.00924338, 0.00246477)
